@@ -1,12 +1,14 @@
 import java.util.*;
 
 public class Share {
-
+	
+	private String shareName;
 	private String commodityType;
 	private ArrayList<Commodity> commodities;
 	
-	public Share(String commodityType, int value, int amount)
+	public Share(String shareName, String commodityType, int value, int amount)
 	{
+		this.shareName = shareName;
 		this.commodityType = commodityType;
 		commodities = new ArrayList<Commodity>();
 		while(commodities.size() < amount)

@@ -16,15 +16,15 @@ public class SimplePlay {
 	public SimplePlay()
 	{
 		players = new ArrayList<Player>();
-		cards = new ArrayList<Card>();
 		shares = new ArrayList<Share>();
+		cards = new ArrayList<Card>();
 	}
 	
 	public void display()
 	{
 		int numPlayers = getPlayers();
-		ArrayList<Share> shares = getShares();
-		ArrayList<Card> cards = getCards();
+		setUpShares();
+		setUpCards();
 		
 	}
 	
@@ -36,7 +36,7 @@ public class SimplePlay {
 		return numPlayers;
 	}
 	
-	public ArrayList<Share> getShares()
+	public void setUpShares()
 	{
 		System.out.println("How many type of commodity ?");
 		int numTypes = input.nextInt();
@@ -50,14 +50,14 @@ public class SimplePlay {
 			System.out.print("Type " + typeCount + " : ");
 			input.nextLine();
 			String commodityType = input.nextLine();
-			shares.add(new Share(commodityType, value, numSharesEachCommoType));
+			String shareName = commodityType + "Share";
+			shares.add(new Share(shareName, commodityType, value, numSharesEachCommoType));
 			numTypes--;
 			typeCount++;
 		}
-		return shares;
 	}
 	
-	public ArrayList<Card> getCards()
+	public void setUpCards()
 	{
 		System.out.println("How many type of cards?");
 		int numCardTypes = input.nextInt();
@@ -78,6 +78,5 @@ public class SimplePlay {
 			numCardTypes--;
 			typeCount++;
 		}
-		return cards;
 	}
 }
