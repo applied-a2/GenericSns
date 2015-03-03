@@ -5,7 +5,7 @@ public class Player {
 	private int order;
 	private int money;
 	private Card holdingCard;
-	private ArrayList<Share> shareHolds;
+	private ArrayList<Commodity> shareHolds;
 	
 	public Player(int order, int money)
 	{
@@ -18,8 +18,16 @@ public class Player {
 		holdingCard = card;
 	}
 	
-	public void buyShares(ArrayList<Share> shares)
+	public Card exposeCard()
+	{
+		return holdingCard;
+	}
+	
+	public void buyShares(ArrayList<Commodity> shares)
 	{
 		shareHolds = shares;
 	}
+	
+	/*A method to sell share(s) from the shares array list
+	 */
 }

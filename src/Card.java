@@ -2,17 +2,24 @@
 public class Card {
 
 	private String type;
+	private String function;
 	private int value;
 	
-	public Card(String type, int value)
+	public Card(String type,String function, int value)
 	{
 		this.type = type;
+		this.function = function;
 		this.value = value;
 	}
 	
 	public String getCardType()
 	{
 		return type;
+	}
+	
+	public String getCardFunction()
+	{
+		return function;
 	}
 	
 	public int getCardValue()
