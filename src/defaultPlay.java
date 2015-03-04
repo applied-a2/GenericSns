@@ -97,6 +97,6 @@ public class defaultPlay {
 		Commodity store = new Commodity("store", 10);
 		storeShares.add(store);
 	}
-	
+	 
 	}
 }
