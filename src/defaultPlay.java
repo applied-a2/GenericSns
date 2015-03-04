@@ -17,5 +17,65 @@ public class defaultPlay {
 		shippingShares = new ArrayList<Commodity>();
 		steelShares = new ArrayList<Commodity>();
 		storeShares = new ArrayList<Commodity>();
+		cards.addAll(getMotorCards());
+		cards.addAll(getShippingCards());
+		cards.addAll(getStoreCards());
+		cards.addAll(getStoreCards());
+	}
+	
+	public ArrayList<Card> getMotorCards()
+	{
+		ArrayList<Card> motorCards = new ArrayList<Card>();
+		for(int upValue = 2; upValue <= 4; upValue++)
+		{
+			motorCards.add(new Card("motors", "up", upValue));
+		}
+		for(int downValue = 2; downValue <= 4; downValue++)
+		{
+			motorCards.add(new Card("motors", "down", downValue));
+		}
+		return motorCards;
+	}
+	
+	public ArrayList<Card> getShippingCards()
+	{
+		ArrayList<Card> shippingCards = new ArrayList<Card>();
+		for(int upValue = 2; upValue <= 4; upValue++)
+		{
+			shippingCards.add(new Card("shippings", "up", upValue));
+		}
+		for(int downValue = 2; downValue <= 4; downValue++)
+		{
+			shippingCards.add(new Card("shippings", "down", downValue));
+		}
+		return shippingCards;
+	}
+	
+	public ArrayList<Card> getStoreCards()
+	{
+		ArrayList<Card> storeCards = new ArrayList<Card>();
+		for(int upValue = 2; upValue <= 4; upValue++)
+		{
+			storeCards.add(new Card("stores", "up", upValue));
+		}
+		for(int downValue = 2; downValue <= 4; downValue++)
+		{
+			storeCards.add(new Card("stores", "down", downValue));
+		}
+		return storeCards;
+	}
+	
+	public ArrayList<Card> getSteelCards()
+	{
+		ArrayList<Card> steelCards = new ArrayList<Card>();
+		for(int upValue = 2; upValue <= 4; upValue++)
+		{
+			steelCards.add(new Card("steels", "up", upValue));
+		}
+		for(int downValue = 2; downValue <= 4; downValue++)
+		{
+			steelCards.add(new Card("steels", "down", downValue));
+		}
+		return steelCards;
 	}
 }
