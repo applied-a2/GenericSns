@@ -19,7 +19,7 @@ public class defaultPlay {
 		storeShares = new ArrayList<Commodity>();
 		cards.addAll(getMotorCards());
 		cards.addAll(getShippingCards());
-		cards.addAll(getStoreCards());
+		cards.addAll(getSteelCards());// changed to steel
 		cards.addAll(getStoreCards());
 	}
 	
