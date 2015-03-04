@@ -20,9 +20,12 @@ public class Commodity {
 		return value;
 	}
 	
-	public void updateValue(int value)
+	public void updateValue(int nvalue)
 	{
-		this.value = value;
+		if(((value+nvalue) >=0)&&(((value+nvalue) <= 20)))
+		{
+			value += nvalue;
+		}
 	}
 	
 	public void updateCommodityType(String commodityType)
