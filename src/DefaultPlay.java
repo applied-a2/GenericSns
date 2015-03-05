@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.Random;
 
 public class DefaultPlay {
 
@@ -9,6 +10,7 @@ public class DefaultPlay {
 	private ArrayList<Commodity> steelShares;
 	private ArrayList<Commodity> storeShares;
 	private ArrayList<Card> cards;
+	private Random randomCard;
 	
 	public static void main(String[] args)
 	{
@@ -24,6 +26,7 @@ public class DefaultPlay {
 		steelShares = new ArrayList<Commodity>();
 		storeShares = new ArrayList<Commodity>();
 		setUpShares();
+		randomCard = new Random();
 		cards = new ArrayList<Card>(); //(Thai): I forgot this line, sorry ^^
 		//cards.addAll(getMotorCards());
 		//cards.addAll(getShippingCards());
@@ -73,21 +76,28 @@ public class DefaultPlay {
 		cards.add(new Card("bear", "down", 4));
 	}
 	
+	public Card generateRandomCard()
+    {
+        
+        int index = randomCard.nextInt(cards.size());
+        return cards.get(index);
+    }
+	
 	public void setUpShares()
 	{
-	while (motorShares.size() < 27){
+	 while (motorShares.size() < 28){
 		Commodity motors = new Commodity("motors", 10);
 		motorShares.add(motors);
 	}
-	while (shippingShares.size() < 27){
+	while (shippingShares.size() < 28){
 		Commodity shipping = new Commodity("shipping", 10);
 		shippingShares.add(shipping);
 	}
-	while (steelShares.size() < 27){
+	while (steelShares.size() < 28){
 		Commodity steel = new Commodity("steel", 10);
 		steelShares.add(steel);
 	}
-	while (storeShares.size() < 27){
+	while (storeShares.size() < 28){
 		Commodity store = new Commodity("store", 10);
 		storeShares.add(store);
 	}
