@@ -4,6 +4,7 @@ public class Player {
 
 	private int order;
 	private int money;
+	private int turn; 
 	private Card holdingCard;
 	private ArrayList<Commodity> shareHolds;
 	
@@ -28,6 +29,15 @@ public class Player {
 		shareHolds = shares;
 	}
 	
+	public void getTurn()
+	{
+		this.turn = turn;
+	}
+	
+	public void setTurn(int turn)
+	{
+		 this.turn = turn;
+	}
 	/*A method to sell share(s) from the shares array list
 	 */
 }

@@ -93,4 +93,25 @@ public class DefaultPlay {
 	}
 	 
 	}
+	
+	public void setUpPlayers()
+	{
+		System.out.println("How many players?");
+		System.out.print("==>");
+		int numPlayers = input.nextInt();
+		//int money = 80;
+		while(players.size() < numPlayers)
+		{
+			players.add(new Player(players.size() + 1, 80));
+		}
+		numPlayers++;
+		for(Player player: players)
+		{
+			player.setTurn(numPlayers);
+			numPlayers--;
+		}
+		
+	}
+	
+	
 }
