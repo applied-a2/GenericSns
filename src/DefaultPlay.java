@@ -75,22 +75,21 @@ public class DefaultPlay {
 	
 	public void setUpShares()
 	{
-	while (motorShares.size() < 27){
-		Commodity motors = new Commodity("motors", 10);
-		motorShares.add(motors);
-	}
-	while (shippingShares.size() < 27){
-		Commodity shipping = new Commodity("shipping", 10);
-		shippingShares.add(shipping);
-	}
-	while (steelShares.size() < 27){
-		Commodity steel = new Commodity("steel", 10);
-		steelShares.add(steel);
-	}
-	while (storeShares.size() < 27){
-		Commodity store = new Commodity("store", 10);
-		storeShares.add(store);
-	}
-	 
+		while (motorShares.size() < 27){
+			Commodity motors = new Commodity("motors", 10);
+			motorShares.add(motors);
+		}
+		while (shippingShares.size() < 27){
+			Commodity shipping = new Commodity("shipping", 10);
+			shippingShares.add(shipping);
+		}
+		while (steelShares.size() < 27){
+			Commodity steel = new Commodity("steel", 10);
+			steelShares.add(steel);
+		}
+		while (storeShares.size() < 27){
+			Commodity store = new Commodity("store", 10);
+			storeShares.add(store);
+		}
 	}
 }
