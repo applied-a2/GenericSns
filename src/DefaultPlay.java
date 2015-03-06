@@ -1,7 +1,6 @@
 import java.util.*;
 import java.util.Random;
-import java.util.HashMap;
-import java.util.Iterator;
+
 
 
 public class DefaultPlay {
@@ -14,8 +13,10 @@ public class DefaultPlay {
 	private ArrayList<Commodity> storeShares;
 	private ArrayList<Card> cards;
 	private Random randomCard;
-	private ArrayList<Card> randomCards;
-	private HashMap<Player, Card> HoldingCards;
+	
+	
+	
+	
 	public static void main(String[] args)
 	{
 		DefaultPlay defaultPlay = new DefaultPlay();
@@ -30,8 +31,6 @@ public class DefaultPlay {
 		steelShares = new ArrayList<Commodity>();
 		storeShares = new ArrayList<Commodity>();
 		setUpShares();
-		randomCards = new ArrayList<Card>();
-		HoldingCards = new HashMap<Player, Card>();
 		randomCard = new Random();
 		cards = new ArrayList<Card>(); //(Thai): I forgot this line, sorry ^^
 		//cards.addAll(getMotorCards());
@@ -82,64 +81,38 @@ public class DefaultPlay {
 		cards.add(new Card("bear", "down", 4));
 	}
 	
-	public void generateRandomCard()
+
+	public int generateRandomCard()
     {
         
         int index = randomCard.nextInt(cards.size());
-        randomCards.add(cards.get(index));
+        
+        return index;
     }
 	
-	 public void generateHoldingCard(HashMap<Player, Card> HoldingCards)
-	    {
-	        Iterator<Player> it = players.iterator();
-	        while(it.hasNext()) {
-	        	Player player = it.next();
-	        	Card card = randomCards.get(0);
-	            
-	      }
-	   }
+	
 	        
 	   
 	
+
+
 	public void setUpShares()
 	{
-	 while (motorShares.size() < 28){
-		Commodity motors = new Commodity("motors", 10);
-		motorShares.add(motors);
-	}
-	while (shippingShares.size() < 28){
-		Commodity shipping = new Commodity("shipping", 10);
-		shippingShares.add(shipping);
-	}
-	while (steelShares.size() < 28){
-		Commodity steel = new Commodity("steel", 10);
-		steelShares.add(steel);
-	}
-	while (storeShares.size() < 28){
-		Commodity store = new Commodity("store", 10);
-		storeShares.add(store);
-	}
-	 
-	}
-	
-	public void setUpPlayers()
-	{
-		System.out.println("How many players?");
-		System.out.print("==>");
-		int numPlayers = input.nextInt();
-		//int money = 80;
-		while(players.size() < numPlayers)
-		{
-			players.add(new Player(players.size() + 1, 80));
+		while (motorShares.size() < 27){
+			Commodity motors = new Commodity("motors", 10);
+			motorShares.add(motors);
 		}
-		numPlayers++;
-		for(Player player: players)
-		{
-			player.setTurn(numPlayers);
-			numPlayers--;
+		while (shippingShares.size() < 27){
+			Commodity shipping = new Commodity("shipping", 10);
+			shippingShares.add(shipping);
 		}
-		
+		while (steelShares.size() < 27){
+			Commodity steel = new Commodity("steel", 10);
+			steelShares.add(steel);
+		}
+		while (storeShares.size() < 27){
+			Commodity store = new Commodity("store", 10);
+			storeShares.add(store);
+		}
 	}
-	
-	
 }
