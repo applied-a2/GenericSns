@@ -1,5 +1,8 @@
 import java.util.*;
 import java.util.Random;
+import java.util.HashMap;
+import java.util.Iterator;
+
 
 public class DefaultPlay {
 
@@ -11,7 +14,8 @@ public class DefaultPlay {
 	private ArrayList<Commodity> storeShares;
 	private ArrayList<Card> cards;
 	private Random randomCard;
-	
+	private ArrayList<Card> randomCards;
+	private HashMap<Player, Card> HoldingCards;
 	public static void main(String[] args)
 	{
 		DefaultPlay defaultPlay = new DefaultPlay();
@@ -26,6 +30,8 @@ public class DefaultPlay {
 		steelShares = new ArrayList<Commodity>();
 		storeShares = new ArrayList<Commodity>();
 		setUpShares();
+		randomCards = new ArrayList<Card>();
+		HoldingCards = new HashMap<Player, Card>();
 		randomCard = new Random();
 		cards = new ArrayList<Card>(); //(Thai): I forgot this line, sorry ^^
 		//cards.addAll(getMotorCards());
@@ -76,12 +82,24 @@ public class DefaultPlay {
 		cards.add(new Card("bear", "down", 4));
 	}
 	
-	public Card generateRandomCard()
+	public void generateRandomCard()
     {
         
         int index = randomCard.nextInt(cards.size());
-        return cards.get(index);
+        randomCards.add(cards.get(index));
     }
+	
+	 public void generateHoldingCard(HashMap<Player, Card> HoldingCards)
+	    {
+	        Iterator<Player> it = players.iterator();
+	        while(it.hasNext()) {
+	        	Player player = it.next();
+	        	Card card = randomCards.get(0);
+	            
+	      }
+	   }
+	        
+	   
 	
 	public void setUpShares()
 	{
