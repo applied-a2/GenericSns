@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.Random;
 
 public class DefaultPlay {
 
@@ -9,6 +10,7 @@ public class DefaultPlay {
 	private ArrayList<Commodity> steelShares;
 	private ArrayList<Commodity> storeShares;
 	private ArrayList<Card> cards;
+	private Random randomCard;
 	
 	public static void main(String[] args)
 	{
@@ -24,6 +26,7 @@ public class DefaultPlay {
 		steelShares = new ArrayList<Commodity>();
 		storeShares = new ArrayList<Commodity>();
 		setUpShares();
+		randomCard = new Random();
 		cards = new ArrayList<Card>(); //(Thai): I forgot this line, sorry ^^
 		//cards.addAll(getMotorCards());
 		//cards.addAll(getShippingCards());
