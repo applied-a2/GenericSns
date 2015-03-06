@@ -4,6 +4,7 @@ public class Player {
 
 	private int order;
 	private int money;
+	private int turn; 
 	private Card holdingCard;
 	private ArrayList<Commodity> shareHolds;
 	
@@ -41,6 +42,15 @@ public class Player {
 		return sharesToBeBought;//Being returned so it will be taken away from the array as the array will be minus cards
 	}
 	
+	public void getTurn()
+	{
+		this.turn = turn;
+	}
+	
+	public void setTurn(int turn)
+	{
+		 this.turn = turn;
+	}
 	/*A method to sell share(s) from the shares array list
 	 */
 	public ArrayList<Commodity> sellShares(String commodityTypeToBeSold, int numShares)//The commodity type and the number of shares the player wants to sell
