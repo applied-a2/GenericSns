@@ -68,15 +68,15 @@ public class SimplePlay {
 	public void setUpCards()
 	{
 		int numValue = 0;
-		int numCardEachShareType = 0;
+		int numCardEachCommodityType = 0;
 		boolean asking = true; 
 		while(asking)
 		{	
-			System.out.println("How many values for a type of card");
+			System.out.println("How many values for one type of card");
 			numValue = input.nextInt();
-			System.out.println("How many cards for each share type?");
-			numCardEachShareType = input.nextInt();
-			if(numCardEachShareType%numValue == 0)
+			System.out.println("How many cards for each type?");
+			numCardEachCommodityType = input.nextInt();
+			if((numCardEachCommodityType%numValue == 0)&&(numCardEachCommodityType%2 == 0))
 			{
 				asking = false;
 			}
@@ -86,23 +86,25 @@ public class SimplePlay {
 						+ "divisible by number of cards for each type");
 			}
 		}
-		
-		
-		ArrayList<String> shareTypes = getShareTypes();
-		int numMainCardType = shareTypes.size();
-		while(numMainCardType > 0)
-		{
-			for(int i = 0; i < numCardEachShareType; i++)
-			{
-				
-			}
-			numMainCardType--;
-		}
-		
+		int[] mainValues = new int[numValue];
 		for(int i = 0; i < numValue; i++)
 		{
 			System.out.print("Value " + (i+1) + " : ");
 			int value = input.nextInt();
+			mainValues[i] = value;
+		}		
+		ArrayList<String> shareTypes = getShareTypes();
+		for(String shareType: shareTypes)
+		{
+			int firstValue = mainValues[0]; //avoid infinite loops below
+			for(int upValue = mainValues[0]; upValue < (firstValue + numValue); upValue++)
+			{
+				cards.add(new Card(shareType, "up", upValue));
+			}
+			for(int downValue = mainValues[0]; downValue < (firstValue + numValue); downValue++)
+			{
+				cards.add(new Card(shareType, "down", downValue));
+			}
 		}
 	}
 	
