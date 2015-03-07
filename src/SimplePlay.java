@@ -38,7 +38,7 @@ public class SimplePlay {
 		int money = input.nextInt();
 		while(players.size() < numPlayers)
 		{
-			players.add(new Player(players.size(), money));
+			players.add(new Player(players.size() + 1, money));
 		}
 	}
 	
@@ -111,14 +111,15 @@ public class SimplePlay {
 	public ArrayList<String> getShareTypes()
 	{
 		ArrayList<String> shareTypes = new ArrayList<String>();
-		int numShareType = 0;
+		//int numShareType = 0;
 		String shareType = "";
 		for(Commodity commodity: shares)
 		{
 			if(!commodity.getCommodityType().equals(shareType))
 			{
+				shareType = commodity.getCommodityType();
 				shareTypes.add(commodity.getCommodityType());
-				numShareType++;
+				//numShareType++;
 			}
 		}
 		return shareTypes;

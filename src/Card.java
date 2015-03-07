@@ -36,4 +36,9 @@ public class Card {
 	{
 		this.value = value;
 	}
+	
+	public String toString()
+	{
+		return (type + " card" + ", " + function + " " + value + " pound");
+	}
 }

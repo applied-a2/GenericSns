@@ -32,4 +32,9 @@ public class Commodity {
 	{
 		this.commodityType = commodityType;
 	}
+	
+	public String toString()
+	{
+		return (commodityType + "\t" + value + " pound");
+	}
 }
