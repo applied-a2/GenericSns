@@ -86,6 +86,7 @@ public class DefaultPlay {
 	
 	public void display() {
 		setUpPlayers();
+		System.out.println(players.size() + " players");
 		setUpShares();
 		shareIndicator = new ShareIndicator(shares);
 		setUpCards();
@@ -93,7 +94,9 @@ public class DefaultPlay {
 		System.out.println("Number of shares: " + shares.size());
 		System.out.println("Setup complete, On screen !");
 		
-		for(int round = shareIndicator.getRound(); round <= 12; round++)
+		for(int round = 1; round <= 12; round++)//The main 
+																		//loop - round controller - runs from 
+																		//round 1 to round 12  
 		{
 			System.out.println("--------------------");
 			if(round != 1)
@@ -106,12 +109,10 @@ public class DefaultPlay {
 																		//of all cards being 
 																		//dealt in this turn
 			
-			for(int i = 0; i < players.size(); i++)	//The main 
-													//loop - round controller - runs from 
-													//round 1 to round 12  
+			for(int i = 0; i < players.size(); i++)	
 			{
 				Player currentPlayer = players.get(i);		//get player from players list
-				System.out.println("Player " + (i+1));
+				System.out.println("Player " + currentPlayer.getOrder());
 				
 				Card dealtCard = cards.get(generateRandomCard());	//3 steps involved here: get 
 				dealtCardsInRound.add(dealtCard);					//an index from random generator,
@@ -174,6 +175,8 @@ public class DefaultPlay {
 		}
 		
 		System.out.println("Your current balance: " + player.getMoney());
+		System.out.println("Total shares: " + shares.size());
+		System.out.println("Your shares: " + player.getShareHolds().size());
 		System.out.println("--------------------");
 		return finished;
 	}
@@ -285,8 +288,7 @@ public class DefaultPlay {
 	
 	/*
 	 * This method takes in a list of cards having been dealt during current round.
-	 * Extract this list, update THREE THINGS: the big shares list, each player's 
-	 * shares list, and the ShareIndicator's shares list  
+	 * Extract this list, update TWO THINGS: the big shares list and each player's shares list 
 	 * basing on each card.
 	 */
 	public void updateEverything(ArrayList<Card> dealtCardsInRound)
@@ -298,7 +300,7 @@ public class DefaultPlay {
 			int cardValue = dealtCard.getCardValue();
 			
 			if(cardFunction.equals("down")) {
-				cardValue = cardValue * (-1);
+				cardValue = -cardValue;
 			}
 			
 			for(Commodity share: shares) {
@@ -315,18 +317,20 @@ public class DefaultPlay {
 					if(shareOfPlayer.getCommodityType().equals(cardType)||
 							cardType.equals("bull")||cardType.equals("bear"))
 					{
+						//System.out.println("Old value: " + shareOfPlayer.getValue());
 						shareOfPlayer.updateValue(cardValue);
+						//System.out.println("New value: " + shareOfPlayer.getValue());
 					}
 				}
 			}
 			
-			for(Commodity shareRecord: shareIndicator.getshareRecords()){
-				if(shareRecord.getCommodityType().equals(cardType)||
-						cardType.equals("bull")||cardType.equals("bear"))
-				{
-					shareRecord.updateValue(cardValue);
-				}
-			}
+//			for(Commodity shareRecord: shareIndicator.getshareRecords()){
+//				if(shareRecord.getCommodityType().equals(cardType)||
+//						cardType.equals("bull")||cardType.equals("bear"))
+//				{
+//					shareRecord.updateValue(cardValue);
+//				}
+//			}
 		}
 	}
 }

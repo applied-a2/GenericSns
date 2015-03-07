@@ -2,9 +2,9 @@ import java.util.*;
 
 public class Player {
 
-	private int order;
+	private int order;	//Player's identity
 	private int money;
-	private int turn; 
+	//private int turn; 
 	private Card holdingCard;
 	private ArrayList<Commodity> shareHolds;
 	
@@ -18,6 +18,11 @@ public class Player {
 	public ArrayList<Commodity> getShareHolds()
 	{
 		return shareHolds;
+	}
+	
+	public int getOrder()
+	{
+		return order;
 	}
 	
 	public int getMoney()
@@ -66,15 +71,15 @@ public class Player {
 		return sharesToBeBought;//Being returned so it will be taken away from the array as the array will be minus cards
 	}
 	
-	public void getTurn()
-	{
-		this.turn = turn;
-	}
-	
-	public void setTurn(int turn)
-	{
-		 this.turn = turn;
-	}
+//	public void getTurn()
+//	{
+//		this.turn = turn;
+//	}
+//	
+//	public void setTurn(int turn)
+//	{
+//		 this.turn = turn;
+//	}
 	
 	/*A method to sell share(s) from the shares array list
 	 */

@@ -3,7 +3,7 @@ import java.util.*;
 public class ShareIndicator {
 	
 	private	ArrayList<Commodity> shareRecords;
-	private int round;
+	//private int round;
 	 
 	public ShareIndicator(ArrayList<Commodity> shares)
 	{
@@ -18,40 +18,40 @@ public class ShareIndicator {
 			}
 		}
 		this.shareRecords = shareRecords;
-		this.round= 1;
+		//this.round= 1;
 	}
 	
-	public void updateshareRecords(String commodityType, int newValue)
-	{
-		for(Commodity shareRecord: shareRecords)
-		{
-			if(shareRecord.getCommodityType().equals(commodityType))
-			{
-				if((shareRecord.getValue() + newValue >= 0)&&(shareRecord.getValue() + newValue <= 20))
-				{
-					shareRecord.updateValue(newValue);
-				}
-			}
-		}
-	}
+//	public void updateshareRecords(String commodityType, int newValue)
+//	{
+//		for(Commodity shareRecord: shareRecords)
+//		{
+//			if(shareRecord.getCommodityType().equals(commodityType))
+//			{
+//				if((shareRecord.getValue() + newValue >= 0)&&(shareRecord.getValue() + newValue <= 20))
+//				{
+//					shareRecord.updateValue(newValue);
+//				}
+//			}
+//		}
+//	}
 	
 	public ArrayList<Commodity> getshareRecords()
 	{
 		return shareRecords;
 	}
 	
-	public int getRound()
-	{
-		return round;
-	}
-	
-	public void nextRound()
-	{
-		if(round < 12)
-		{
-			round++;
-		}
-	}
+//	public int getRound()
+//	{
+//		return round;
+//	}
+//	
+//	public void nextRound()
+//	{
+//		if(round < 12)
+//		{
+//			round++;
+//		}
+//	}
 	
 	public String toString()
 	{
