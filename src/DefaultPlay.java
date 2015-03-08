@@ -181,6 +181,16 @@ public class DefaultPlay {
 		return finished;
 	}
 	
+	public void printMainTypes()
+	{
+		int countPrint = 0;
+		for(String commodityType: mainTypes)
+		{
+			System.out.println("<" + countPrint + "> " + commodityType.toString());
+			countPrint++;
+		}
+	}
+	
 	/*
 	 * This method take a commodity 
 	 * type entered by player, then
@@ -192,30 +202,19 @@ public class DefaultPlay {
 		boolean flag = true;
 		while(flag)
 		{
-			boolean hasThatType = false;
+			//boolean hasThatType = false;			
 			System.out.print("Type "+ count +": ");
-			input.nextLine();
-			String typeChosenByPlayer = input.nextLine().toLowerCase();			
-			for(String commodityType: mainTypes)
+			int typeNumber = input.nextInt();
+			
+			if((typeNumber < mainTypes.length)&&(typeNumber >= 0))		
 			{
-				if(commodityType.equals(typeChosenByPlayer))
-				{
-					hasThatType = true;
-				}
-			}
-			if(hasThatType)
-			{
-				commodityTypeToBeBoughtOrSold = typeChosenByPlayer;
+				commodityTypeToBeBoughtOrSold = mainTypes[typeNumber];
+				//hasThatType= true; 
 				flag = false;
 			}
 			else
 			{
-				System.out.print("Don't have that, main types are: ");
-				for(String type: mainTypes)
-				{
-					System.out.print(type + "\t");
-				}
-				System.out.println("Try again ...");
+				System.out.println("Don't have that, try again ...");
 			}
 		}
 		return commodityTypeToBeBoughtOrSold;
@@ -232,6 +231,7 @@ public class DefaultPlay {
 		int count = 1;
 		
 		ArrayList<Commodity> sharesToBeTakenAwayFromStack = new ArrayList<Commodity>();
+		printMainTypes();
 		
 		while(numType > 0)
 		{
@@ -273,6 +273,8 @@ public class DefaultPlay {
 		System.out.println("How many types of share do you want to sell?");
 		int numType = input.nextInt();
 		int count = 1;
+		printMainTypes();
+		
 		while(numType > 0)
 		{
 			String commodityTypeToBeSold = getChosenCommodityTypeFromPlayer(count);

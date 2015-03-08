@@ -89,11 +89,16 @@ public class Player {
 		ArrayList<Commodity> sharesToBeSold = new ArrayList<Commodity>();
 		for(Commodity commodity: shareHolds)
 		{
-			if(commodity.getCommodityType().equals(commodityTypeToBeSold)&&(numShares>0))
+			if(commodity.getCommodityType().equals(commodityTypeToBeSold)&&(numShares >= 0)) //should be >= 0 , not just > 0 
 			{
 				moneyToReceive += commodity.getValue();//For each time the loop runs, the value of that commodity will be added to moneyToPay
+				sharesToBeSold.add(commodity);	//commodity must be added to the sharesToBeSold list 
+												//before being removed from player's shares list, if 
+												//this is done the other way around, this loop will 
+												//remove the commodity before adding it to somewhere else, 
+												//which causes error 
 				shareHolds.remove(commodity);//Takes commodity from the players stack
-				sharesToBeSold.add(commodity);
+				
 				numShares--;//For loop will run until numShares reaches 0
 			}
 		}
