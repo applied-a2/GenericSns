@@ -58,7 +58,7 @@ public class SimplePlay {
 			String commodityType = input.nextLine();
 			for(int i = 0; i < numShareEachCommoType; i++)
 			{
-				shares.add(new Commodity(commodityType, value));
+				//shares.add(new Commodity(commodityType, value));
 			}	
 			numTypes--;
 			typeCount++;

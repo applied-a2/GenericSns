@@ -1,13 +1,32 @@
 
 public class Commodity {
 
+	private Long id;
+	private Long ownerId;
 	private String commodityType;
 	private int value;
 	
-	public Commodity(String commodityType, int value)
+	public Commodity(Long id, String commodityType, int value)
 	{
+		this.id = id;
 		this.commodityType = commodityType;
 		this.value = value;
+		ownerId = null;
+	}
+	
+	public void setOwnerId(Long ownerId)
+	{
+		this.ownerId = ownerId;
+	}
+	
+	public Long getOwnerId()
+	{
+		return ownerId;
+	}
+	
+	public Long id()
+	{
+		return id;
 	}
 	
 	public String getCommodityType()
