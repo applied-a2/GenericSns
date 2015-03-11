@@ -82,13 +82,9 @@ public class DefaultPlay {
 			System.out.println("--------------------");
 			if(round != 1)
 			{
-				//int limit = players.size();?????
-				while (turn > 0){
-				turn = (turn--);// % limit; ??????
-				}	}
-				else {
-					turn = players.size();
-				}
+				int limit = players.size();
+				turn = (turn++) % limit;// ??????
+				
 			//	Collections.reverse(players);
 			}
 			System.out.println("Round " + round);
