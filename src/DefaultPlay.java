@@ -7,7 +7,6 @@ public class DefaultPlay {
 	private Shares shares;
 	private ArrayList<Card> cards;
 	private String[] mainTypes = { "motors", "stores", "steels", "shippings" }; //just loop through this list if needed
-	private int turn = 0;
 	public static void main(String[] args)
 	{
 		DefaultPlay defaultPlay = new DefaultPlay();
@@ -82,8 +81,7 @@ public class DefaultPlay {
 			System.out.println("--------------------");
 			if(round != 1)
 			{
-				int turn = players.size()-1;			
-				Collections.rotate(players,turn);
+				Collections.rotate(players,players.size()-1);
 			}
 			System.out.println("Round " + round);
 			
