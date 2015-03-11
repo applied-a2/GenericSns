@@ -82,8 +82,8 @@ public class DefaultPlay {
 			System.out.println("--------------------");
 			if(round != 1)
 			{
-				int turn = players.size();			
-				Collections.rotate(players,turn-1);
+				int turn = players.size()-1;			
+				Collections.rotate(players,turn);
 			}
 			System.out.println("Round " + round);
 			
