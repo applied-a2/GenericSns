@@ -6,6 +6,7 @@ public class Player {
 	private int identity;	
 	private int money;
 	private ArrayList<Long> shareIds;
+	private boolean retired;
 	
 	public Player(int identity, int money)
 	{
@@ -13,6 +14,7 @@ public class Player {
 		this.money = money;
 		shareIds = new ArrayList<Long>();
 		id = RandomGenerator.randomId();
+		retired = false;
 	}
 	
 	public Long playerId()
@@ -58,6 +60,16 @@ public class Player {
 	public void removeShareId(Long shareId)
 	{
 		shareIds.remove(shareId);
+	}
+	
+	public boolean retired()
+	{
+		return retired;
+	}
+	
+	public void setRetired()
+	{
+		retired = true;
 	}
 	
 	public String toString()

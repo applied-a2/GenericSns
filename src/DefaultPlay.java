@@ -90,19 +90,32 @@ public class DefaultPlay {
 			for(int i = 0; i < players.size(); i++)	
 			{
 				Player currentPlayer = players.get(i);		//get player from players list
-				System.out.println("Player " + currentPlayer.getIdentity());
 				
-				int randomCardIndex = RandomGenerator.randomInt(cards.size());
-				dealtCardIndexInRound[i] = randomCardIndex;
-				
-				System.out.println(cards.get(randomCardIndex).toString());	//print out details of the card
-				
-				boolean playerTurn = true;				
-				while(playerTurn)						//player will chose what to do in this loop
-				{
-					playerTurn = !playerChoice(currentPlayer);	//when player finished, a boolean "true"
-																//will be returned, but we must make this
-																//boolean "false" to escape the loop
+				if(!currentPlayer.retired()) {
+					System.out.println("Player " + currentPlayer.getIdentity());
+					
+					int randomCardIndex = RandomGenerator.randomInt(cards.size() - 1); //must be (-1) in case 
+																					   //the random index is equal
+																					   //to players' size (arraylist out of bound)
+					dealtCardIndexInRound[i] = randomCardIndex;
+					
+					System.out.println(cards.get(randomCardIndex).toString());	//print out details of the card
+					
+					boolean playerTurn = true;	
+					printPlayerShares(currentPlayer);
+					while(playerTurn)						//player will chose what to do in this loop
+					{
+						playerTurn = !playerChoice(currentPlayer);	//when player finished, a boolean "true"
+																	//will be returned, but we must make this
+																	//boolean "false" to escape the loop
+					}
+					System.out.println("Press enter to continue ...");
+					input.nextLine();
+					input.nextLine();
+					
+					if(currentPlayer.getMoney() == 0 && currentPlayer.getShareIds().size() == 0) {
+						currentPlayer.setRetired();
+					}
 				}
 			}
 			
@@ -116,7 +129,7 @@ public class DefaultPlay {
 			updateShares(dealtCardIndexInRound);
 			
 			System.out.println("~~~~~~Share Indicator Records~~~~~");
-			System.out.println(shares.shareIndicator(mainTypes));	//print the share indicator
+			System.out.print(shares.shareIndicator(mainTypes));	//print the share indicator
 			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			
 			System.out.println("--------------------");
@@ -149,7 +162,7 @@ public class DefaultPlay {
 		System.out.println("Choices: ");
 		System.out.println("1) Buy");
 		System.out.println("2) Sell");
-		System.out.println("3) Do nothing");
+		System.out.println("3) Pass");
 		int choice = input.nextInt();
 		
 		switch(choice)
@@ -173,11 +186,25 @@ public class DefaultPlay {
 	public void printMainTypes()
 	{
 		int countPrint = 0;
+		System.out.println("Choose one type:");
 		for(String commodityType: mainTypes)
 		{
 			System.out.println("<" + countPrint + "> " + commodityType.toString());
 			countPrint++;
 		}
+	}
+	
+	public void printPlayerShares(Player player)
+	{
+		System.out.println("~~~~~~~~~Player " 
+				+ player.getIdentity() + " shares~~~~~~~~~~");
+		for(String commodityType: mainTypes)
+		{
+			System.out.println("| " + commodityType + "\t" 
+					+ shares.getSoldShareIds(player.playerId(), commodityType).size()
+					+ " (" + shares.getShareValueOnType(commodityType) + " pound each)");
+		}
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	}
 	
 	/*
@@ -215,22 +242,25 @@ public class DefaultPlay {
 		String commodityTypeToBeBought = getChosenCommodityTypeFromPlayer();
 		System.out.println("How many " + commodityTypeToBeBought + "?");
 		int shareNum = input.nextInt();
-		ArrayList<Long> availableShareIds = shares.getAvailableShareIds(commodityTypeToBeBought);
-		int moneyToPay = shares.getShareValueOnType(commodityTypeToBeBought) * shareNum;
+		int refinedShareNum = refineShareNum(shareNum);
+		if(refinedShareNum <= 0) {
+			System.out.println("Cannot buy negative or zero amount of share");
+			return false;
+		}
 		
-		if(currentPlayer.getMoney() < moneyToPay)
-		{
+		ArrayList<Long> availableShareIds = shares.getAvailableShareIds(commodityTypeToBeBought);
+		int moneyToPay = shares.getShareValueOnType(commodityTypeToBeBought) * refinedShareNum;
+		
+		if(currentPlayer.getMoney() < moneyToPay) {
 			System.out.println("You don't have enough money");
 			return false;
 		}
-		else if(availableShareIds.size() < shareNum)
-		{
+		else if(availableShareIds.size() < refinedShareNum) {
 			System.out.println("There are not enough shares for you");
 			return false;
 		}
-		else
-		{
-			for(int i = 0; i < shareNum; i++)
+		else {
+			for(int i = 0; i < refinedShareNum; i++)
 			{
 				currentPlayer.addShareId(availableShareIds.get(i));
 				shares.giveShareToPlayer(availableShareIds.get(i), currentPlayer.playerId());
@@ -243,12 +273,44 @@ public class DefaultPlay {
 		return playerConfirm;
 	}
 	
+	public int refineShareNum(int currentNum)
+	{
+		int refinedNum = 1;
+		if(currentNum <= 5) {
+			refinedNum =  currentNum;
+		}
+		else if (currentNum <= 10) {
+			refinedNum = 10;
+			System.out.println("If more than 5 shares"
+					+ ", \nyou can only buy 10, 15 or "
+					+ "20 shares \n ---> amount changed to " + refinedNum);
+		}
+		else if (currentNum <= 15) {
+			refinedNum = 15;
+			System.out.println("If more than 5 shares"
+					+ ", \nyou can only buy 10, 15 or "
+					+ "20 shares \n ---> amount changed to " + refinedNum);
+		}
+		else if (currentNum <= 20) {
+			refinedNum = 20;
+			System.out.println("If more than 5 shares"
+					+ ", \nyou can only buy 10, 15 or "
+					+ "20 shares \n ---> amount changed to " + refinedNum);
+		}
+		return refinedNum;
+	}
+	
 	public boolean sellShares(Player currentPlayer)
 	{
 		printMainTypes();
 		String commodityTypeToBeSold = getChosenCommodityTypeFromPlayer();
 		System.out.println("How many " + commodityTypeToBeSold + "?");
 		int shareNum = input.nextInt();
+		
+		if(shareNum <= 0) {
+			System.out.println("Cannot sell zero or negative amount of share");
+			return false;
+		}
 		
 		ArrayList<Long> shareIdsBoughtByPlayer 
 				= shares.getSoldShareIds(currentPlayer.playerId(), commodityTypeToBeSold);
