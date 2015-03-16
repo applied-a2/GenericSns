@@ -70,7 +70,7 @@ public class DefaultPlay {
 		
 		//shareIndicator = new ShareIndicator(shares);
 		setUpCards();
-		Collections.shuffle(cards);	//just mix the cards we just made		
+		
 		System.out.println("Number of shares: " + shares.getShares().size());
 		System.out.println("Setup complete, On screen !");
 		
@@ -78,6 +78,7 @@ public class DefaultPlay {
 																		//loop - round controller - runs from 
 																		//round 1 to round 12  
 		{
+			Collections.shuffle(cards);	//just mix the cards we just made		
 			System.out.println("--------------------");
 			if(round != 1)
 			{
