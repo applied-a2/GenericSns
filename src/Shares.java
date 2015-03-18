@@ -17,6 +17,7 @@ public class Shares {
 			}	
 		}
 	}
+
 	
 	public String shareIndicator(String[] mainTypes)
 	{

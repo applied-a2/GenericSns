@@ -52,7 +52,8 @@ public class SimplePlay {
 		int value = input.nextInt();
 		if ((value <= 5) || (value >= 15))
 		{
-		 		value = 10;
+		 		value = 10;               //This method sets the share value to default if it passes the limit 
+		 		System.out.print("intial value for each share");
 		}
 		int typeCount = 1;
 		while(numTypes > 0)
