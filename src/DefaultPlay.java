@@ -7,13 +7,16 @@ public class DefaultPlay {
 	private Shares shares;
 	private ArrayList<Card> cards;
 	private String[] mainTypes = { "motors", "stores", "steels", "shippings" }; //just loop through this list if needed
+	private boolean buyCompleted = false; //this boolean make sure each player only purchases once
+	
 	public static void main(String[] args)
 	{
 		DefaultPlay defaultPlay = new DefaultPlay();
 		defaultPlay.display();
 	}
 
-	public DefaultPlay() {
+	public DefaultPlay() 
+	{
 		players = new ArrayList<Player>();
 		shares = new Shares(mainTypes, 28);
 		cards = new ArrayList<Card>();
@@ -24,8 +27,7 @@ public class DefaultPlay {
 		System.out.println("How many players?");
 		System.out.print("==>");
 		int numPlayers = input.nextInt();
-		while(players.size() < numPlayers)
-		{
+		while(players.size() < numPlayers) {
 			players.add(new Player(players.size()+1, 80));
 		}
 	}
@@ -36,18 +38,14 @@ public class DefaultPlay {
 	 * Then add the 2 bonus cards
 	 */
 	public void setUpCards() {	
-		for (String mainType : mainTypes)	
-		{
-			for (int upValue = 2; upValue <= 4; upValue++)		
-			{
+		for (String mainType : mainTypes) {
+			for (int upValue = 2; upValue <= 4; upValue++) {
 				cards.add(new Card(mainType, "up", upValue));
 			}
-			for (int downValue = 2; downValue <= 4; downValue++) 			
-			{
+			for (int downValue = 2; downValue <= 4; downValue++) {
 				cards.add(new Card(mainType, "down", downValue));
 			}
 		}
-
 		cards.add(new Card("bull", "up", 4));
 		cards.add(new Card("bear", "down", 4));
 		
@@ -66,11 +64,7 @@ public class DefaultPlay {
 	public void display() {
 		setUpPlayers();
 		System.out.println(players.size() + " players");
-		
-		
-		//shareIndicator = new ShareIndicator(shares);
 		setUpCards();
-		Collections.shuffle(cards);	//just mix the cards we just made		
 		System.out.println("Number of shares: " + shares.getShares().size());
 		System.out.println("Setup complete, On screen !");
 		
@@ -78,31 +72,43 @@ public class DefaultPlay {
 																		//loop - round controller - runs from 
 																		//round 1 to round 12  
 		{
+			Collections.shuffle(cards);									//mix the cards every round		
 			System.out.println("--------------------");
-			if(round != 1)
-			{
-				Collections.rotate(players,players.size()-1);
+			if(round != 1) {
+				Collections.rotate(players,players.size()-1);			//player turn controller
 			}
 			System.out.println("Round " + round);
 			
 			int[] dealtCardIndexInRound = new int[players.size()]; 
 			
-			for(int i = 0; i < players.size(); i++)	
-			{
+			for(int i = 0; i < players.size(); i++)	{
 				Player currentPlayer = players.get(i);		//get player from players list
-				System.out.println("Player " + currentPlayer.getIdentity());
 				
-				int randomCardIndex = RandomGenerator.randomInt(cards.size());
-				dealtCardIndexInRound[i] = randomCardIndex;
-				
-				System.out.println(cards.get(randomCardIndex).toString());	//print out details of the card
-				
-				boolean playerTurn = true;				
-				while(playerTurn)						//player will chose what to do in this loop
-				{
-					playerTurn = !playerChoice(currentPlayer);	//when player finished, a boolean "true"
-																//will be returned, but we must make this
-																//boolean "false" to escape the loop
+				if(!currentPlayer.retired()) {
+					System.out.println("Player " + currentPlayer.getIdentity());
+					
+					int randomCardIndex = RandomGenerator.randomInt(cards.size() - 1); //must be (-1) in case 
+																					   //the random index is equal
+																					   //to players' size (arraylist out of bound)
+					dealtCardIndexInRound[i] = randomCardIndex;
+					
+					System.out.println(cards.get(randomCardIndex).toString());	//print out details of the card
+					
+					boolean playerTurn = true;	
+					printPlayerShares(currentPlayer);		//print out shares of current player
+					
+					buyCompleted = false;					//reset buyCompleted boolean
+					while(playerTurn)						//player will chose what to do in this loop
+					{
+						playerTurn = !playerChoice(currentPlayer);	//when player finished, a boolean "true"
+																	//will be returned, but we must make this
+																	//boolean "false" to escape the loop
+					}
+					
+					if(currentPlayer.getMoney() == 0 
+							&& currentPlayer.getShareIds().size() == 0) {
+						currentPlayer.setRetired();
+					}
 				}
 			}
 			
@@ -116,10 +122,13 @@ public class DefaultPlay {
 			updateShares(dealtCardIndexInRound);
 			
 			System.out.println("~~~~~~Share Indicator Records~~~~~");
-			System.out.println(shares.shareIndicator(mainTypes));	//print the share indicator
+			System.out.print(shares.shareIndicator(mainTypes));	//print the share indicator
 			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			
 			System.out.println("--------------------");
+			System.out.println("Press enter to continue ...");
+			input.nextLine();
+			input.nextLine();
 		}
 		
 		sellAll();
@@ -127,11 +136,9 @@ public class DefaultPlay {
 		System.out.println("======> Result <======");
 		int highestMoneyAmount = 0;
 		String winner = "";
-		for(Player player: players)
-		{
+		for(Player player: players) {
 			System.out.println("|| " + player.toString());
-			if(player.getMoney() >= highestMoneyAmount)
-			{
+			if(player.getMoney() >= highestMoneyAmount) {
 				winner = "Player " + player.getIdentity();
 			}
 		}
@@ -149,23 +156,27 @@ public class DefaultPlay {
 		System.out.println("Choices: ");
 		System.out.println("1) Buy");
 		System.out.println("2) Sell");
-		System.out.println("3) Do nothing");
+		System.out.println("3) Pass");
 		int choice = input.nextInt();
 		
-		switch(choice)
-		{
-			case 1: finished = buyShares(player);
+		switch(choice) {
+			case 1: if(!buyCompleted) {
+						finished = buyShares(player);
+					}
+					else {
+						System.out.println("You can buy only once");
+						finished = false;
+					}
 					break;
 			case 2: finished = sellShares(player);
 					break;
 			case 3: finished = true;
 					break;
 			default: System.out.println("Don't have that choice");
+					break;
 		}
-		
 		System.out.println("Your current balance: " + player.getMoney());
-		System.out.println("Total shares: " + shares.getShares().size());
-		System.out.println("Your shares: " + player.getShareIds().size());
+		printPlayerShares(player);
 		System.out.println("--------------------");
 		return finished;
 	}
@@ -173,36 +184,43 @@ public class DefaultPlay {
 	public void printMainTypes()
 	{
 		int countPrint = 0;
-		for(String commodityType: mainTypes)
-		{
+		System.out.println("Choose one type:");
+		for(String commodityType: mainTypes) {
 			System.out.println("<" + countPrint + "> " + commodityType.toString());
 			countPrint++;
 		}
 	}
 	
+	public void printPlayerShares(Player player)
+	{
+		System.out.println("~~~~~~~~~Player " 
+				+ player.getIdentity() + " shares~~~~~~~~~~");
+		for(String commodityType: mainTypes) {
+			System.out.println("| " + commodityType + "\t" 
+					+ shares.getSoldShareIds(player.playerId(), commodityType).size()
+					+ " (" + shares.getShareValueOnType(commodityType) + " pound each)");
+		}
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	}
+	
 	/*
 	 * This method take a commodity 
 	 * type entered by player, then
-	 * check if main types list contains that choice
+	 * check if main types list contains 
+	 * that choice, ask again if doesn't
 	 */
 	public String getChosenCommodityTypeFromPlayer()
 	{
 		String commodityTypeToBeBoughtOrSold = "";
 		boolean flag = true;
-		while(flag)
-		{
-			//boolean hasThatType = false;			
+		while(flag) {		
 			System.out.print("===>");
 			int typeNumber = input.nextInt();
-			
-			if((typeNumber < mainTypes.length)&&(typeNumber >= 0))		
-			{
+			if((typeNumber < mainTypes.length)&&(typeNumber >= 0)) {
 				commodityTypeToBeBoughtOrSold = mainTypes[typeNumber];
-				//hasThatType= true; 
 				flag = false;
 			}
-			else
-			{
+			else {
 				System.out.println("Don't have that, try again ...");
 			}
 		}
@@ -215,54 +233,87 @@ public class DefaultPlay {
 		String commodityTypeToBeBought = getChosenCommodityTypeFromPlayer();
 		System.out.println("How many " + commodityTypeToBeBought + "?");
 		int shareNum = input.nextInt();
-		ArrayList<Long> availableShareIds = shares.getAvailableShareIds(commodityTypeToBeBought);
-		int moneyToPay = shares.getShareValueOnType(commodityTypeToBeBought) * shareNum;
+		int refinedShareNum = refineShareNum(shareNum);
+		if(refinedShareNum <= 0) {
+			System.out.println("Cannot buy negative or zero amount of share");
+			return false;
+		}
 		
-		if(currentPlayer.getMoney() < moneyToPay)
-		{
+		ArrayList<Long> availableShareIds = shares.getAvailableShareIds(commodityTypeToBeBought);
+		int moneyToPay = shares.getShareValueOnType(commodityTypeToBeBought) * refinedShareNum;
+		
+		if(currentPlayer.getMoney() < moneyToPay) {
 			System.out.println("You don't have enough money");
 			return false;
 		}
-		else if(availableShareIds.size() < shareNum)
-		{
+		else if(availableShareIds.size() < refinedShareNum) {
 			System.out.println("There are not enough shares for you");
 			return false;
 		}
-		else
-		{
-			for(int i = 0; i < shareNum; i++)
-			{
+		else {
+			if(confirmFinished("Confirm puchase, do you want to change ?")) {
+				return false;
+			}
+			
+			for(int i = 0; i < refinedShareNum; i++) {
 				currentPlayer.addShareId(availableShareIds.get(i));
 				shares.giveShareToPlayer(availableShareIds.get(i), currentPlayer.playerId());
 			}
 			currentPlayer.setMoney(currentPlayer.getMoney() - moneyToPay);
 			System.out.println("Purchase completed");
+			buyCompleted = true;
 		}
 		
-		boolean playerConfirm = confirmFinished();
-		return playerConfirm;
+		return confirmFinished("Finished?");
+	}
+	
+	public int refineShareNum(int num)
+	{
+		//int refinedNum = 1;
+		if (num <= 5)  {
+			return num;
+		}
+		for (int i = 5; (i + 5) <= 20; i += 5) {
+			if (num == (i+5)) {
+				return num;
+			}
+			else if ((num > i)&&(num < i+5)) {
+				num = i + 5;
+				System.out.println("If more than 5 shares"
+						+ ", \nyou can only buy 10, 15 or "
+						+ "20 shares \n ---> amount changed to " + num);
+			}
+		}
+		return num;
 	}
 	
 	public boolean sellShares(Player currentPlayer)
 	{
 		printMainTypes();
 		String commodityTypeToBeSold = getChosenCommodityTypeFromPlayer();
+		ArrayList<Long> shareIdsBoughtByPlayer 
+		= shares.getSoldShareIds(currentPlayer.playerId(), commodityTypeToBeSold);
+		
+		if(shareIdsBoughtByPlayer.size() == 0) {
+			System.out.println("You don't have any " + commodityTypeToBeSold + " share");
+			return false;
+		}
+		
 		System.out.println("How many " + commodityTypeToBeSold + "?");
 		int shareNum = input.nextInt();
 		
-		ArrayList<Long> shareIdsBoughtByPlayer 
-				= shares.getSoldShareIds(currentPlayer.playerId(), commodityTypeToBeSold);
+		if(shareNum <= 0) {
+			System.out.println("Cannot sell zero or negative amount of share");
+			return false;
+		}
 		
-		if(shareIdsBoughtByPlayer.size() < shareNum)
-		{
+		if(shareIdsBoughtByPlayer.size() < shareNum) {
 			System.out.println("You haven't bought that many " + commodityTypeToBeSold + " !");
 			return false;
 		}
-		else
-		{
+		else {
 			int moneyToReceive = 0;
-			for(int i = 0; i < shareNum; i++)
-			{
+			for(int i = 0; i < shareNum; i++) {
 				currentPlayer.removeShareId(shareIdsBoughtByPlayer.get(i));
 				shares.takeShareFromPlayer(shareIdsBoughtByPlayer.get(i));
 				moneyToReceive += shares.getShareValueOnType(commodityTypeToBeSold);
@@ -271,41 +322,32 @@ public class DefaultPlay {
 			System.out.println("Sell completed");
 		}
 		
-		boolean playerConfirm = confirmFinished();
-		return playerConfirm;
+		return confirmFinished("Finished?");
 	}
 	
-	public boolean confirmFinished()
+	public boolean confirmFinished(String message)
 	{
-		System.out.println("Finished ? (y/n)");
+		System.out.println(message + " (y/n)");
 		System.out.print("===>");
 		char answer = input.next().toLowerCase().charAt(0);
-		if(answer == 'y')
-		{
-			return true;
-		}
-		return false;
+		return (answer == 'y');
 	}
 	
 	public void updateShares(int[] dealtCardIndexInRound)
 	{
-		for(int i = 0; i < dealtCardIndexInRound.length; i++)
-		{
+		for(int i = 0; i < dealtCardIndexInRound.length; i++) {
 			Card card = cards.get(dealtCardIndexInRound[i]);
 			String cardType = card.getCardType();
 			String cardFunction = card.getCardFunction();
 			int cardValue = card.getCardValue();
 			
-			if(cardFunction.equals("down"))
-			{
+			if(cardFunction.equals("down")) {
 				cardValue = -cardValue;
 			}
 			
-			for(String shareType: mainTypes)
-			{
+			for(String shareType: mainTypes) {
 				if(shareType.equals(cardType)
-						||cardType.equals("bear")||cardType.equals("bull"))
-				{
+						||cardType.equals("bear")||cardType.equals("bull")) {
 					shares.updateOneTypeOfShare(shareType,cardValue);
 				}
 			}
@@ -314,11 +356,9 @@ public class DefaultPlay {
 	
 	public void sellAll()
 	{
-		for(Player player: players)
-		{
+		for(Player player: players) {
 			int moneyToReceive = 0;
-			for(Long shareId: player.getShareIds())
-			{
+			for(Long shareId: player.getShareIds()) {
 				shares.takeShareFromPlayer(shareId);
 				moneyToReceive += shares.getShareValueOnId(shareId);
 			}

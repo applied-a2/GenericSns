@@ -52,12 +52,17 @@ public class SimplePlay {
 	
 	public void setUpShares()
 	{
-		System.out.println("How many type's of commodity ?");
+		System.out.println("How many type of  commodity ?");
 		int numTypes = input.nextInt();
 		System.out.println("How many share's for each stock?");
 		int numShareEachCommoType = input.nextInt();
 		System.out.println("Value for each share ?");
 		int value = input.nextInt();
+		if ((value <= 5) || (value >= 15))
+		{
+		 		value = 10;               //This method sets the share value to default if it passes the limit 
+		 		System.out.print("intial value for each share");
+		}
 		int typeCount = 1;
 		while(numTypes > 0)
 		{
