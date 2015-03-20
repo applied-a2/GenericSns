@@ -53,7 +53,7 @@ public class SimplePlay {
 		if ((value <= 5) || (value >= 15))
 		{
 		 		value = 10;               //This method sets the share value to default if it passes the limit 
-		 		System.out.print("intial value for each share");
+		 		System.out.print("defualt value has been set");
 		}
 		int typeCount = 1;
 		while(numTypes > 0)
