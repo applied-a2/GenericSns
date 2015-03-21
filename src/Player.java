@@ -74,6 +74,6 @@ public class Player {
 	
 	public String toString()
 	{
-		return ("Player " + identity + ": " + money + " pound \n");
+		return ("Player " + identity + ": " + money + " pound");
 	}
 }

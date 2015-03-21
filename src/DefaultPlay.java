@@ -14,7 +14,10 @@ public class DefaultPlay {
 		DefaultPlay defaultPlay = new DefaultPlay();
 		defaultPlay.display();
 	}
-
+	
+	/*
+	 * Constructor
+	 */
 	public DefaultPlay() 
 	{
 		players = new ArrayList<Player>();
@@ -22,6 +25,10 @@ public class DefaultPlay {
 		cards = new ArrayList<Card>();
 	}
 	
+	/*
+	 * Set up the player objects basing on the number entered 
+	 * by user, add them to the players array list
+	 */
 	public void setUpPlayers()
 	{
 		System.out.println("How many players?");
@@ -61,6 +68,9 @@ public class DefaultPlay {
 //		System.out.println("1 bear card, 1 bull card");
 	}
 
+	/*
+	 * Main driver of the game
+	 */
 	public void display() {
 		setUpPlayers();
 		System.out.println(players.size() + " players");
@@ -68,86 +78,83 @@ public class DefaultPlay {
 		System.out.println("Number of shares: " + shares.getShares().size());
 		System.out.println("Setup complete, On screen !");
 		
-		for(int round = 1; round <= 12; round++)//The main 
-																		//loop - round controller - runs from 
-																		//round 1 to round 12  
+		for(int round = 1; round <= 12; round++)//The main loop-round controller (1 to 12)
 		{
-			Collections.shuffle(cards);									//mix the cards every round		
-			System.out.println("--------------------");
-			if(round != 1) {
-				Collections.rotate(players,players.size()-1);			//player turn controller
-			}
-			System.out.println("Round " + round);
-			
-			int[] dealtCardIndexInRound = new int[players.size()]; 
-			
-			for(int i = 0; i < players.size(); i++)	{
-				Player currentPlayer = players.get(i);		//get player from players list
-				
-				if(!currentPlayer.retired()) {
-					System.out.println("Player " + currentPlayer.getIdentity());
-					
-					int randomCardIndex = RandomGenerator.randomInt(cards.size() - 1); //must be (-1) in case 
-																					   //the random index is equal
-																					   //to players' size (arraylist out of bound)
-					dealtCardIndexInRound[i] = randomCardIndex;
-					
-					System.out.println(cards.get(randomCardIndex).toString());	//print out details of the card
-					
-					boolean playerTurn = true;	
-					printPlayerShares(currentPlayer);		//print out shares of current player
-					
-					buyCompleted = false;					//reset buyCompleted boolean
-					while(playerTurn)						//player will chose what to do in this loop
-					{
-						playerTurn = !playerChoice(currentPlayer);	//when player finished, a boolean "true"
-																	//will be returned, but we must make this
-																	//boolean "false" to escape the loop
-					}
-					
-					if(currentPlayer.getMoney() == 0 
-							&& currentPlayer.getShareIds().size() == 0) {
-						currentPlayer.setRetired();
-					}
-				}
-			}
-			
-			System.out.println("Okay, round " + round 		//After all players have done
-					+ " finished, exposing cards ..."); 	//what they want, print out details															
-			for(int index: dealtCardIndexInRound)				//of all the cards having been dealt 
-			{												//in this round
-				System.out.println(cards.get(index).toString());
-			}
-			
-			updateShares(dealtCardIndexInRound);
-			
-			System.out.println("~~~~~~Share Indicator Records~~~~~");
-			System.out.print(shares.shareIndicator(mainTypes));	//print the share indicator
-			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			
-			System.out.println("--------------------");
-			System.out.println("Press enter to continue ...");
-			input.nextLine();
-			input.nextLine();
+			roundDriver(round);
 		}
-		
 		sellAll();
 		
-		System.out.println("======> Result <======");
-		int highestMoneyAmount = 0;
-		String winner = "";
-		for(Player player: players) {
-			System.out.println("|| " + player.toString());
-			if(player.getMoney() >= highestMoneyAmount) {
-				winner = "Player " + player.getIdentity();
-			}
-		}
-		System.out.println("Winner: " + winner);
+//		System.out.println("======> Result <======");
+//		int highestMoneyAmount = 0;
+//		String winner = "";
+//		for(Player player: players) {
+//			System.out.println("|| " + player.toString());
+//			if(player.getMoney() >= highestMoneyAmount) {
+//				winner = "Player " + player.getIdentity();
+//			}
+//		}
+//		System.out.println("Winner: " + winner);
 	}
 	
 	/*
+	 * Run an individual round of the game
+	 * @param round number
+	 */
+	public void roundDriver(int round) {
+		Collections.shuffle(cards);									//mix the cards every round		
+		System.out.println("--------------------");
+		if(round != 1) {
+			Collections.rotate(players,players.size()-1);			//player turn controller
+		}
+		System.out.println("Round " + round);
+		
+		int[] dealtCardIndexInRound = new int[players.size()]; 
+		
+		for(int i = 0; i < players.size(); i++)	{
+			Player currentPlayer = players.get(i);		//get player from players list
+			
+			if(!currentPlayer.retired()) {
+				System.out.println("Player " + currentPlayer.getIdentity());
+				
+				int randomCardIndex = RandomGenerator.randomInt(cards.size() - 1); //must be (-1) in case 
+																				   //the random index is equal
+																				   //to players' size (arraylist out of bound)
+				dealtCardIndexInRound[i] = randomCardIndex;
+				
+				System.out.println(cards.get(randomCardIndex).toString());	//print out details of the card
+				
+				boolean playerTurn = true;	
+				printPlayerShares(currentPlayer);		//print out shares of current player
+				
+				buyCompleted = false;					//reset buyCompleted boolean
+				while(playerTurn)						//player will chose what to do in this loop
+				{
+					playerTurn = !playerChoice(currentPlayer);	//when player finished, a boolean "true"
+																//will be returned, but we must make this
+																//boolean "false" to escape the loop
+				}
+				
+				if(currentPlayer.getMoney() == 0 						//if player has no money and no shares
+						&& currentPlayer.getShareIds().size() == 0) {	//he is retired
+					currentPlayer.setRetired();
+				}
+			}
+		}
+		
+		System.out.println("Okay, round " + round 		//After all players have done
+				+ " finished, exposing cards ..."); 	//what they want, print out details															
+		for(int index: dealtCardIndexInRound)				//of all the cards having been dealt 
+		{												//in this round
+			System.out.println(cards.get(index).toString());
+		}
+		updateShares(dealtCardIndexInRound);
+		printShareIndicator();	
+	}
+	
+	
+	/*
 	 * This method asks player to choose an action (buy, sell or do nothing),
-	 * when finished, return "true" (which means player has finished his turn)
+	 * @return boolean value indicating whether player has finished his turn
 	 */
 	public boolean playerChoice(Player player)
 	{
@@ -181,6 +188,10 @@ public class DefaultPlay {
 		return finished;
 	}
 	
+	
+	/*
+	 * Print out all the share types the game has 
+	 */
 	public void printMainTypes()
 	{
 		int countPrint = 0;
@@ -191,6 +202,25 @@ public class DefaultPlay {
 		}
 	}
 	
+	/*
+	 * Print the share indicator (records of shares' values)
+	 */
+	public void printShareIndicator() {
+		System.out.println("~~~~~~Share Indicator Records~~~~~");
+		System.out.print(shares.shareIndicator(mainTypes));
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		
+		System.out.println("--------------------");
+		System.out.println("Press enter to continue ...");
+		input.nextLine();
+		input.nextLine();
+	}
+	
+	
+	/*
+	 * This prints out shares bought by player, 
+	 * along with their current value
+	 */
 	public void printPlayerShares(Player player)
 	{
 		System.out.println("~~~~~~~~~Player " 
@@ -204,10 +234,10 @@ public class DefaultPlay {
 	}
 	
 	/*
-	 * This method take a commodity 
-	 * type entered by player, then
-	 * check if main types list contains 
-	 * that choice, ask again if doesn't
+	 * This method take a commodity type entered by player, then
+	 * check if main types list contains that choice, ask 
+	 * again if doesn't
+	 * @return the valid commodity type chosen by user
 	 */
 	public String getChosenCommodityTypeFromPlayer()
 	{
@@ -227,6 +257,13 @@ public class DefaultPlay {
 		return commodityTypeToBeBoughtOrSold;
 	}
 	
+	/*
+	 * This method is called when player chooses to buy shares
+	 * The transaction will stop immediately when an invalid event happens
+	 * (eg. player tries to buy while he does not have enough money) 
+	 * @param the current player
+	 * @return 
+	 */
 	public boolean buyShares(Player currentPlayer)
 	{
 		printMainTypes();
@@ -267,6 +304,14 @@ public class DefaultPlay {
 		return confirmFinished("Finished?");
 	}
 	
+	/*
+	 * Restrict the amount of share entered by player, make sure
+	 * it's either 10, 15 or 20 if it's greater than 5. However, 
+	 * if the range of 20 is crossed, the number will remain 
+	 * unchanged, which will be handled by the former method
+	 * @param number entered by player
+	 * @return (restricted) number
+	 */
 	public int refineShareNum(int num)
 	{
 		//int refinedNum = 1;
@@ -287,6 +332,13 @@ public class DefaultPlay {
 		return num;
 	}
 	
+	/*
+	 * This method is called when player chooses to sell his share.
+	 * The transaction will stop immediately when an invalid event happens
+	 * (eg. player tries to sell what he has not bought) 
+	 * @param the current player
+	 * @return a boolean indicating whether the transaction is finish 
+	 */
 	public boolean sellShares(Player currentPlayer)
 	{
 		printMainTypes();
@@ -325,6 +377,11 @@ public class DefaultPlay {
 		return confirmFinished("Finished?");
 	}
 	
+	/*
+	 * Ask for player's confirmation
+	 * @param message to print (detail of the confirmation)
+	 * @return player's decision of type boolean
+	 */
 	public boolean confirmFinished(String message)
 	{
 		System.out.println(message + " (y/n)");
@@ -333,6 +390,10 @@ public class DefaultPlay {
 		return (answer == 'y');
 	}
 	
+	/*
+	 * Update the shares values using all the dealt card
+	 * in round
+	 */
 	public void updateShares(int[] dealtCardIndexInRound)
 	{
 		for(int i = 0; i < dealtCardIndexInRound.length; i++) {
@@ -354,15 +415,39 @@ public class DefaultPlay {
 		}
 	}
 	
+	/*
+	 *This method is called after all rounds 
+	 *have finished. All players' shares will be 
+	 *sold basing on the final record of the share 
+	 *indicator. The final money amount after this will
+	 *determine the winner 
+	 */
 	public void sellAll()
 	{
+		System.out.println("======> Result <======");
+		int highestMoneyAmount = 0;
+		String winner = "";		
 		for(Player player: players) {
-			int moneyToReceive = 0;
-			for(Long shareId: player.getShareIds()) {
-				shares.takeShareFromPlayer(shareId);
-				moneyToReceive += shares.getShareValueOnId(shareId);
+			if(!player.retired()) {
+				int moneyToReceive = 0;
+				ArrayList<Long> shareIds = new ArrayList<Long>();
+				shareIds.addAll(player.getShareIds());
+				for(Long shareId: shareIds) {
+					player.removeShareId(shareId);
+					shares.takeShareFromPlayer(shareId);
+					moneyToReceive += shares.getShareValueOnId(shareId);
+				}
+				player.setMoney(player.getMoney() + moneyToReceive);
+				if(player.getMoney() >= highestMoneyAmount) {
+					highestMoneyAmount = player.getMoney();
+					winner = "Player " + player.getIdentity();
+				}
+				System.out.println("|| " + player.toString());
 			}
-			player.setMoney(player.getMoney() + moneyToReceive);
+			else {
+				System.out.println("|| " + player.toString() + " (retired)");
+			}
 		}
+		System.out.println("\n Winner: " + winner);
 	}
 }

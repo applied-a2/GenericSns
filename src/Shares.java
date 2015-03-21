@@ -64,6 +64,7 @@ public class Shares {
 			if(share.id().equals(shareId))
 			{
 				share.setOwnerId(null);
+				//System.out.println(share.getValue());
 			}
 		}
 	}
@@ -94,14 +95,15 @@ public class Shares {
 		return availShareIds;
 	}
 	
-	public int getShareValueOnId(Long id)
+	public int getShareValueOnId(Long shareId)
 	{
 		int value = 0;
 		for(Commodity share: shares)
 		{
-			if(share.id().equals(id));
+			if(share.id().equals(shareId))
 			{
 				value = share.getValue();
+				System.out.println("value on id "+value);
 			}
 		}
 		return value;
