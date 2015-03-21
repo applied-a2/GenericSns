@@ -3,7 +3,7 @@ import java.util.*;
 public class Player {
 
 	private Long id;
-	private int identity;	
+	private int identity;
 	private int money;
 	private ArrayList<Long> shareIds;
 	private boolean retired;
@@ -16,49 +16,40 @@ public class Player {
 		id = RandomGenerator.randomId();
 		retired = false;
 	}
-	
-	public Long playerId()
-	{
+
+	public Long playerId() {
 		return id;
 	}
-	
-	public ArrayList<Long> getShareIds()
-	{
+
+	public ArrayList<Long> getShareIds() {
 		return shareIds;
 	}
-	
-	public void addShareId(Long id)
-	{
+
+	public void addShareId(Long id) {
 		shareIds.add(id);
 	}
-	
-	public void updateShareIds(ArrayList<Long> nshareIds)
-	{
+
+	public void updateShareIds(ArrayList<Long> nshareIds) {
 		shareIds = nshareIds;
 	}
-	
-	public int getIdentity()
-	{
+
+	public int getIdentity() {
 		return identity;
 	}
-	
-	public int getMoney()
-	{
+
+	public int getMoney() {
 		return money;
 	}
-	
-	public void setMoney(int nmoney)
-	{
+
+	public void setMoney(int nmoney) {
 		money = nmoney;
 	}
-	
-	public void addShareIds(ArrayList<Long> shareIds)
-	{
+
+	public void addShareIds(ArrayList<Long> shareIds) {
 		shareIds.addAll(shareIds);
 	}
-	
-	public void removeShareId(Long shareId)
-	{
+
+	public void removeShareId(Long shareId) {
 		shareIds.remove(shareId);
 	}
 	

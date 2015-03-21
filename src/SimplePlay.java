@@ -26,6 +26,9 @@ public class SimplePlay {
 		setUpShares();
 		setUpCards();
 		System.out.println("Done");
+		Collections.shuffle(cards);	//just mix the cards we just made		
+	//	System.out.println("Number of shares: " + shares.getShares().size());
+		System.out.println("Setup complete, On screen !");
 		
 	}
 	
@@ -36,6 +39,11 @@ public class SimplePlay {
 		int numPlayers = input.nextInt();
 		System.out.print("Initial amount of money for each player: ");
 		int money = input.nextInt();
+		if (money < 40 || money >100){
+			money = 80;
+		}
+		
+		
 		while(players.size() < numPlayers)
 		{
 			players.add(new Player(players.size() + 1, money));
@@ -46,13 +54,14 @@ public class SimplePlay {
 	{
 		System.out.println("How many type of  commodity ?");
 		int numTypes = input.nextInt();
-		System.out.println("How many share for each stock?");
+		System.out.println("How many share's for each stock?");
 		int numShareEachCommoType = input.nextInt();
 		System.out.println("Value for each share ?");
 		int value = input.nextInt();
 		if ((value <= 5) || (value >= 15))
 		{
-		 		value = 10;
+		 		value = 10;               //This method sets the share value to default if it passes the limit 
+		 		System.out.print("defualt value has been set");
 		}
 		int typeCount = 1;
 		while(numTypes > 0)
@@ -128,4 +137,5 @@ public class SimplePlay {
 		}
 		return shareTypes;
 	}
+	
 }
