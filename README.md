@@ -7,5 +7,7 @@ This repository contains the logic of the game, which is the foundation for the 
 
 The game can also be at this played at this point by running SimplePlay.java (Command-line user interface)
 
+Full implementation with proper GUI: https://github.com/applied-a2/StocksAndShares-GUI
+
 Details about the game can be found at:
 https://boardgamegeek.com/boardgame/17191/stocks-shares
