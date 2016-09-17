@@ -1,5 +1,5 @@
-# GenericSns
-Stocks and Shares - Programming Assignment 2
+# StocksAndShares
+Programming Assignment 2
 Authors: Peter Hearne, Shane Halley, Ian Barnes, Abdullahi Shafii, Thai Kha Le
 
 This is part of a group project to build the Stocks and Shares board game. 
